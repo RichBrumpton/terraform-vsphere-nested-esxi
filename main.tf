@@ -99,11 +99,24 @@ resource "vsphere_virtual_machine" "esxi" {
   }
 
   provisioner "remote-exec" {
-    connection {
-      type     = "ssh"
-      user     = "root"
-      password = random_password.esxi_root_password.result
-      host     = var.ip_address = "" ? self.default_ip_address : var.ip_address
+    dynamic "connection" {
+      count = var.ip_address = "" ? 1 : 0
+      content {
+        type     = "ssh"
+        user     = "root"
+        password = random_password.esxi_root_password.result
+        host     =  self.default_ip_address
+      }
+    }
+
+    dynamic "connection" {
+      count = var.ip_address = "" ? 0 : 1
+      content {
+        type     = "ssh"
+        user     = "root"
+        password = random_password.esxi_root_password.result
+        host     =  var.ip_address
+      }
     }
 
     inline = [

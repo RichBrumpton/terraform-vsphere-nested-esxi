@@ -100,7 +100,7 @@ resource "vsphere_virtual_machine" "esxi" {
 
   provisioner "remote-exec" {
     dynamic "connection" {
-      count = var.ip_address = "" ? 1 : 0
+      count = var.ip_address == "" ? 1 : 0
       content {
         type     = "ssh"
         user     = "root"
@@ -110,7 +110,7 @@ resource "vsphere_virtual_machine" "esxi" {
     }
 
     dynamic "connection" {
-      count = var.ip_address = "" ? 0 : 1
+      count = var.ip_address == "" ? 0 : 1
       content {
         type     = "ssh"
         user     = "root"

@@ -51,7 +51,8 @@ resource "vsphere_virtual_machine" "esxi" {
   enable_disk_uuid    = true
   sync_time_with_host = true
   enable_logging      = true
-
+  
+  wait_for_guest_net_routable = true
   wait_for_guest_net_timeout = 0
   wait_for_guest_ip_timeout  = 5
 

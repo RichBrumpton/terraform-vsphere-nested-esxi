@@ -52,7 +52,6 @@ resource "vsphere_virtual_machine" "esxi" {
   sync_time_with_host = true
   enable_logging      = true
   
-  wait_for_guest_net_routable = true
   wait_for_guest_net_timeout = 0
   wait_for_guest_ip_timeout  = 5
 
@@ -104,7 +103,7 @@ resource "vsphere_virtual_machine" "esxi" {
       type     = "ssh"
       user     = "root"
       password = random_password.esxi_root_password.result
-      host     = self.default_ip_address
+      host     = var.ip_address = "" ? self.default_ip_address : var.ip_address
     }
 
     inline = [

@@ -131,3 +131,21 @@ variable "vlan_id" {
   default     = null
   description = "The VLAN ID the management interface uses. Defaults to `null` which results in one not being configured."
 }
+
+variable "datastore1_size" {
+  type = number
+  description = "size of datastore1 in gigabytes"
+  default = null
+}
+
+variable "root_password" {
+  type = string
+  description = "specified root password, defaults to a random password if not set."
+  default = ""
+}
+
+variable "pod_name" {
+  type = string
+  description = "name ofthe pod, required if creating datastore1"
+  default = ""
+}

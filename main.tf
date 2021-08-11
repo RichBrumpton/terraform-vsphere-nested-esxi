@@ -2,6 +2,7 @@ locals {
   split_hostname = split(".", var.hostname)
   short_hostname = local.split_hostname[0]
   domain         = join(".", slice(local.split_hostname, 1, length(local.split_hostname)))
+  root_password = var.root_password == "" ? random_password.esxi_root_password.result : var.root_password
 }
 
 resource "random_password" "esxi_root_password" {
@@ -21,6 +22,15 @@ data "vsphere_ovf_vm_template" "ova" {
   ip_protocol          = "IPV4"
   disk_provisioning    = "thin"
   ip_allocation_policy = "STATIC_MANUAL"
+}
+
+resource "vsphere_virtual_disk" "datastore1" {
+  size       = 1024
+  vmdk_path  = "${var.pod_name}-datastore1.vmdk"
+  datacenter = var.datacenter_id
+  datastore  = data.vsphere_ovf_vm_template.ova.datastore_id
+  type       = "thin"
+  create_directories = true
 }
 
 resource "vsphere_virtual_machine" "esxi" {
@@ -76,6 +86,14 @@ resource "vsphere_virtual_machine" "esxi" {
     ovf_network_map      = data.vsphere_ovf_vm_template.ova.ovf_network_map
   }
 
+  disk {
+    label = "datastore1"
+    attach = true
+    path = vsphere_virtual_disk.datastore1.vmdk_path
+    disk_mode = "independent_persistent"
+    disk_sharing = "sharingMultiWriter"
+  }
+
   vapp {
     properties = {
       "guestinfo.hostname"   = var.hostname
@@ -86,7 +104,7 @@ resource "vsphere_virtual_machine" "esxi" {
       "guestinfo.domain"     = local.domain
       "guestinfo.ntp"        = var.ntp
       "guestinfo.syslog"     = var.syslog
-      "guestinfo.password"   = random_password.esxi_root_password.result
+      "guestinfo.password"   = local.root_password
       "guestinfo.ssh"        = title(tostring(var.enable_ssh))
       "guestinfo.createvmfs" = title(tostring(!var.enable_vsan))
       "guestinfo.vlan"       = var.vlan_id
@@ -102,7 +120,7 @@ resource "vsphere_virtual_machine" "esxi" {
     connection {
       type     = "ssh"
       user     = "root"
-      password = random_password.esxi_root_password.result
+      password = local.root_password
       host     =  var.ip_address =="" ? self.default_ip_address : var.ip_address
     }
 

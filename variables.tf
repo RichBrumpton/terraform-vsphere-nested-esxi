@@ -149,3 +149,9 @@ variable "pod_name" {
   description = "name ofthe pod, required if creating datastore1"
   default = ""
 }
+
+variable "datacenter_name" {
+  type = string
+  description = "name of the datacenter, can be omitted if only one datacenter"
+  default = null
+}

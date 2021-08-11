@@ -27,7 +27,7 @@ data "vsphere_ovf_vm_template" "ova" {
 resource "vsphere_virtual_disk" "datastore1" {
   size       = 1024
   vmdk_path  = "${var.pod_name}-datastore1.vmdk"
-  datacenter = var.datacenter_id
+  datacenter = var.datacenter_name
   datastore  = data.vsphere_ovf_vm_template.ova.datastore_id
   type       = "thin"
   create_directories = true

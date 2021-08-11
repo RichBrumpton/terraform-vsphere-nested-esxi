@@ -35,6 +35,12 @@ variable "datastore_id" {
   description = "The ID of the datastore the nested ESXi Hosts should be created in."
 }
 
+variable "datastore_name" {
+  type        = string
+  description = "The NAME of the datastore the nested ESXi Hosts should be created in. Required for datastore1"
+  default = null
+}
+
 variable "host_system_id" {
   type        = string
   description = "The ID of the host system that the nested ESXi OVA will be initially deployed on."

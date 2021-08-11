@@ -158,6 +158,10 @@ resource "vsphere_virtual_machine" "esxi" {
       vapp.0.properties,
     ]
   }
+depends_on [
+  vsphere_virtual_disk.datastore1
+]
+  
 }
 
 data "tls_certificate" "nested_esxi_certificate" {

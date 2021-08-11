@@ -89,9 +89,10 @@ resource "vsphere_virtual_machine" "esxi" {
   disk {
     label = "datastore1"
     attach = true
-    path = vsphere_virtual_disk.datastore1.vmdk_path
+    path = "${var.pod_name}/datastore1.vmdk"
     disk_mode = "independent_persistent"
     disk_sharing = "sharingMultiWriter"
+    unit_number = 3
   }
 
   vapp {

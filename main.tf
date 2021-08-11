@@ -34,7 +34,7 @@ resource "vsphere_virtual_disk" "datastore1" {
 }
 
 resource "vsphere_virtual_machine" "esxi" {
-  name             = data.vsphere_ovf_vm_template.ova.name
+  name             = var.hostname
   datacenter_id    = var.datacenter_id
   folder           = data.vsphere_ovf_vm_template.ova.folder
   resource_pool_id = data.vsphere_ovf_vm_template.ova.resource_pool_id

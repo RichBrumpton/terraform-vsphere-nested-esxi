@@ -158,7 +158,7 @@ resource "vsphere_virtual_machine" "esxi" {
       vapp.0.properties,
     ]
   }
-depends_on [
+depends_on = [
   vsphere_virtual_disk.datastore1
 ]
   

@@ -166,7 +166,7 @@ depends_on = [
 }
 
 data "tls_certificate" "nested_esxi_certificate" {
-  url          = "https://${var.ip_address =="" ? self.default_ip_address : var.ip_address}"
+  url          = "https://${var.ip_address =="" ? vsphere_virtual_machine.esxi.default_ip_address : var.ip_address}"
   verify_chain = false
 
   depends_on = [

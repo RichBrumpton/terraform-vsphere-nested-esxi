@@ -122,7 +122,7 @@ resource "vsphere_virtual_machine" "esxi" {
       type     = "ssh"
       user     = "root"
       password = local.root_password
-      host     =  var.ip_address =="" ? self.default_ip_address : var.ip_address
+      host     = var.ip_address =="" ? self.default_ip_address : var.ip_address
     }
 
     inline = [
@@ -166,7 +166,7 @@ depends_on = [
 }
 
 data "tls_certificate" "nested_esxi_certificate" {
-  url          = "https://${var.hostname}"
+  url          = "https://${var.ip_address =="" ? self.default_ip_address : var.ip_address}"
   verify_chain = false
 
   depends_on = [
